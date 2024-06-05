@@ -1,9 +1,14 @@
+{{ define "title" }}
+    {{ . }}
+{{end}}
+
+
 {{ define "content" }}
 
 <h2 class="header container">Books</h2>
 <ul class="container">
-    {{ range . }}
-    <li> {{ .Title}}: {{ .Year }} year</li>
+    {{ range .Content }}
+    <li><a href="{{ $.BaseURL }}/{{ .ID }}">{{ .Title}}</a>: {{ .Year }} year</li>
     {{ end }}
 </ul>
 

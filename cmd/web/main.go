@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	routes "github.com/kcharymyrat/go-book-club/internal/web/routes"
+	"github.com/kcharymyrat/go-book-club/internal/web/routes"
 )
 
 func main() {

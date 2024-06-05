@@ -1,0 +1,14 @@
+{{ define "title" }}
+    {{ . }}
+{{ end }}
+
+
+{{ define "content" }}
+
+    <h2>Book Detail</h2>
+    <h3>Title: {{ .Content.Title }}</h3>
+    <h4>Summary: {{ .Content.Summary }}</h4>
+    <p>Author: {{ .Content.Author }}</p>
+    <p>Year: {{ .Content.Year }} y.</p>
+
+{{ end }}

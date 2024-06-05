@@ -1,0 +1,14 @@
+{{ define "navbar" }}
+
+<nav>
+    <!-- Common navbar content -->
+    <a href="">Book Club</a>
+
+    {{ range .Links }}
+    <a href="{{ .Href }}" {{ if eq .Href $.Active }}class="active"{{ end }}>
+        {{ .Label }}
+    </a>
+    {{ end}}
+</nav>
+
+{{ end }}

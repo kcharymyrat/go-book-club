@@ -7,13 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ template "title" }}</title>
+    <title>{{ template "title" .Title }}</title>
 
     <link rel="stylesheet" href="/static/css/style.css">
+
     {{block "extra-css" . }}{{end}}
 </head>
 <body>
-    {{ template "nav" . }}
+    {{ template "navbar" .Navbar }}
 
     <div class="content">
         {{ block "content" . }}
@@ -21,11 +22,11 @@
         {{end}}
     </div>
 
-    {{ template "footer" . }}
+    {{ template "footer" .Footer }}
 
     <script src="/static/js/main.js"></script>
 
-    {{ block "extra-js" .}}{{end}}
+    {{ block "extra-js" . }}{{ end }}
 </body>
 </html>
 

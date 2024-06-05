@@ -1,26 +1,31 @@
-package web
+package routes
 
 import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	book_handlers "github.com/kcharymyrat/go-book-club/internal/web/handlers"
+
+	"github.com/kcharymyrat/go-book-club/internal/web/handlers"
 )
 
 func Routes() http.Handler {
 	r := chi.NewRouter()
 
-	fileServer := http.FileServer(http.Dir("./static"))
+	fileServer := http.FileServer(http.Dir("./internal/web/static"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	// Books Handlers
-	r.Get("/books/create-form", book_handlers.BookFormHandler)
-	r.Get("/books", book_handlers.GetAllBooksHandler)
-	r.Post("/books", book_handlers.CreateBookHandler)
-	r.Get("/books/{id}", book_handlers.GetBookHandler)
-	r.Put("/books/{id}", book_handlers.UpdateBookHandler)
-	r.Patch("/books/{id}", book_handlers.PatchBookHandler)
-	r.Delete("/books/{id}", book_handlers.DeleteBookHandler)
+	r.Get("/books", handlers.GetAllBooksHandler)
+
+	r.Get("/books/add-book", handlers.AddBookGetHandler)
+	r.Post("/books/add-book", handlers.AddBookPostHandler)
+
+	r.Get("/books/{id}", handlers.GetBookHandler)
+
+	r.Get("/books/update/{id}", handlers.UpdateBookGetHandler)
+	r.Post("/books/update/{id}", handlers.UpdateBookPostHandler)
+
+	r.Post("/books/delete/{id}", handlers.DeleteBookByIDHandler)
 
 	return r
 }
