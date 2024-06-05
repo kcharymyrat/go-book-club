@@ -1,0 +1,10 @@
+{{ define "content" }}
+
+<h2 class="header container">Books</h2>
+<ul class="container">
+    {{ range . }}
+    <li> {{ .Title}}: {{ .Year }} year</li>
+    {{ end }}
+</ul>
+
+{{ end }}
