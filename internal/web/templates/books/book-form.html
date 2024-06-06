@@ -5,7 +5,7 @@
 {{ define "content" }}
 
 <h2 class="header container">Add new books</h2>
-<form class="container" action="{{ .BaseURL }}" method="post">
+<form class="container" action="{{ .BaseURL }}/add-book" method="post">
     <div>
         <input type="text" id="title" name="title" placeholder="Title" value="{{ .FormData.Title }}">
     </div>

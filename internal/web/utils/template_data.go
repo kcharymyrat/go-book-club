@@ -9,14 +9,15 @@ const (
 )
 
 type PageData struct {
-	Title    string
-	Navbar   interface{}
-	Footer   interface{}
-	Content  interface{}
-	FormData interface{}
-	ExtraCSS []string
-	ExtraJS  []string
-	BaseURL  string
+	Title      string
+	Navbar     interface{}
+	Footer     interface{}
+	Content    interface{}
+	FormData   interface{}
+	FormErrors map[string]string
+	ExtraCSS   []string
+	ExtraJS    []string
+	BaseURL    string
 }
 
 type NavbarData struct {

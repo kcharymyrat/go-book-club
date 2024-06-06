@@ -48,7 +48,7 @@ func AddBookGetHandler(w http.ResponseWriter, r *http.Request) {
 	pageData.FormData = struct {
 		Title   string
 		Summary string
-		Year    string
+		Year    int
 		Author  string
 		Authors []*model.Author
 	}{
@@ -77,23 +77,78 @@ func AddBookGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddBookPostHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
 
 	// Parse the form
 	err := r.ParseForm()
 	if err != nil {
-		log.Fatalf("Could not parse the form. %v", err.Error())
+		log.Printf("Could not parse the form. %v", err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 
 	// Retrieve parsed values - validation step
-	year, err := strconv.Atoi(r.PostForm["year"][0])
+	title := r.PostFormValue("title")
+	summary := r.PostFormValue("summary")
+	yearStr := r.PostFormValue("year")
+	author := r.PostFormValue("author")
+
+	formData := struct {
+		Title   string
+		Summary string
+		Year    int
+		Author  string
+		Authors []*model.Author
+	}{
+		Title:   title,
+		Summary: summary,
+		Author:  author,
+		Authors: Authors,
+	}
+
+	formErrors := make(map[string]string)
+
+	year, err := strconv.Atoi(yearStr)
 	if err != nil {
-		log.Fatalf("Could not get the valid year. %v", err.Error())
+		formErrors["year"] = "Invalid year format"
+	}
+
+	if title == "" {
+		formErrors["title"] = "Title is required"
+	}
+
+	if summary == "" {
+		formErrors["summary"] = "Summary is required"
+	}
+
+	if len(formErrors) > 0 {
+		pageData.FormData = formData
+		pageData.FormErrors = formErrors
+
+		bookFormTmplURL := tmplDirURL + "/books/book-form.html"
+		t, err := template.ParseFiles(
+			baseTmplURL, navbarTmplURL, footerTmplURL, bookFormTmplURL,
+		)
+		if err != nil {
+			log.Printf("Could not parse template files. %s", err.Error())
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		err = t.ExecuteTemplate(w, "base", pageData)
+		if err != nil {
+			log.Printf("Could not execute template %v", t.Tree.Name)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		return
 	}
 
 	book := model.Book{
 		ID:      3,
-		Title:   r.PostForm["title"][0],
-		Summary: r.PostForm["summary"][0],
+		Title:   title,
+		Summary: summary,
 		Year:    year,
 	}
 
