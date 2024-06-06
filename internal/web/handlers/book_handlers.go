@@ -8,21 +8,30 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/kcharymyrat/go-book-club/internal/web/utils"
 	"github.com/kcharymyrat/go-book-club/pkg/model"
 )
 
 func GetAllBooksHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+
+	fmt.Println("path =", r.URL.Path)
+
+	navbar := pageData.Navbar.(utils.NavbarData)
+	navbar.Active = r.URL.Path
+
+	pageData.Navbar = navbar
 	pageData.Content = Books
 	fmt.Printf("%+v\n", pageData)
-
-	w.Header().Set("Content-Type", "text/html")
 
 	booksTmplURL := tmplDirURL + "/books/books.html"
 	t, err := template.ParseFiles(
 		baseTmplURL, navbarTmplURL, footerTmplURL, booksTmplURL,
 	)
 	if err != nil {
-		log.Fatalf("Could not parse template files. %s", err.Error())
+		log.Printf("Could not parse template files. %s", err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 
 	err = t.ExecuteTemplate(w, "base", pageData)
@@ -34,17 +43,36 @@ func GetAllBooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddBookGetHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+
+	pageData.FormData = struct {
+		Title   string
+		Summary string
+		Year    string
+		Author  string
+		Authors []*model.Author
+	}{
+		Authors: Authors,
+	}
+
+	fmt.Printf("%+v\n", pageData)
+
 	bookFormTmplURL := tmplDirURL + "/books/book-form.html"
 	t, err := template.ParseFiles(
 		baseTmplURL, navbarTmplURL, footerTmplURL, bookFormTmplURL,
 	)
 	if err != nil {
-		log.Fatal("Could not parse template files. " + err.Error())
+		log.Printf("Could not parse template files. %s", err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+
 	}
 
 	err = t.ExecuteTemplate(w, "base", pageData)
 	if err != nil {
-		log.Fatalf("Could not execute template %v", t.Tree.Name)
+		log.Printf("Could not execute template %v", t.Tree.Name)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -103,7 +131,7 @@ func GetBookHandler(w http.ResponseWriter, r *http.Request) {
 	var book *model.Book
 	for _, b := range Books {
 		if b.ID == id {
-			book = &b
+			book = b
 			break
 		}
 	}

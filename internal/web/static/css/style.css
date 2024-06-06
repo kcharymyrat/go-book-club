@@ -1,7 +1,22 @@
+a {
+    text-decoration: none;
+}
+
 .container {
-    margin: auto;
+    margin: 0 auto;
 }
 
 .header {
+    color: green;
+}
+
+
+nav a {
+    margin-right: 1rem;
+}
+
+.active {
+    text-decoration: none;
+    font-weight: bold;
     color: green;
 }

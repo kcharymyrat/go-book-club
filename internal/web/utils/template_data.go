@@ -13,6 +13,7 @@ type PageData struct {
 	Navbar   interface{}
 	Footer   interface{}
 	Content  interface{}
+	FormData interface{}
 	ExtraCSS []string
 	ExtraJS  []string
 	BaseURL  string

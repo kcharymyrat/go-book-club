@@ -7,18 +7,22 @@
 <h2 class="header container">Add new books</h2>
 <form class="container" action="{{ .BaseURL }}" method="post">
     <div>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title">
+        <input type="text" id="title" name="title" placeholder="Title" value="{{ .FormData.Title }}">
     </div>
 
     <div>
-        <label for="summary">Summary:</label>
-        <textarea name="summary" id="summary" cols="30" rows="10"></textarea>
+        <textarea name="summary" id="summary" cols="30" rows="10" placeholder="Summary">{{ .FormData.Summary}}</textarea>
     </div>
 
     <div>
-        <label for="year">Year:</label>
-        <input type="number" name="year" id="year">
+        <input type="number" name="year" id="year" placeholder="Publication Year" value={{ .FormData.Year }}>
+    </div>
+    <div>
+        <select name="authors" id="authors">
+            {{ range .FormData.Authors }}
+                <option value="{{ .ID }}">{{ printf  "%s %s" .FirstName .LastName }}</option>
+            {{ end }}}
+        </select>
     </div>
     <input type="submit">
 </form>

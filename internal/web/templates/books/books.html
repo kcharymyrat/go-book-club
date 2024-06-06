@@ -8,7 +8,12 @@
 <h2 class="header container">Books</h2>
 <ul class="container">
     {{ range .Content }}
-    <li><a href="{{ $.BaseURL }}/{{ .ID }}">{{ .Title}}</a>: {{ .Year }} year</li>
+    <li>
+        <a href="{{ $.BaseURL }}/{{ .ID }}">{{ .Title }}</a> : {{ .Year }} by
+        {{ range .Authors }}
+           <a href="">{{ printf "%s %s" .FirstName .LastName }}</a>, 
+        {{ end }}
+    </li>
     {{ end }}
 </ul>
 
