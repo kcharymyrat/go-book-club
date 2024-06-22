@@ -1,4 +1,4 @@
-module go-book-club
+module github.com/kcharymyrat/go-book-club
 
 go 1.22.4
 
